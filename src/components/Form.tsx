@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, ChangeEvent} from "react"
+import { Activity } from "../types"
 import { categories } from "../data/categories"
 
 
@@ -10,15 +11,30 @@ export const Form = () => {
         name: '',
         calories: 0
     })
+
     
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
+
+        const isNumberField = ['category', 'calories'].includes(e.target.id)
+
+
+        setActivity({
+            ...activity,
+            [e.target.id]: isNumberField ?  +e.target.value:  e.target.value
+        })
+    }
+
+
     return (
         <form className="space-y-5 bg-white shadow p-10 rounded-lg">
             <div className="grid grid-cols-1 gap-3">
                 <label htmlFor="category" className="font-bold">Categoria:</label>
-                <select
+                <select 
                     className="border border-slate-300 p-2 rounded-lg bg-white"
                     id="category"
                     value={activity.category}
+                    onChange={handleChange}
                 >
                     {categories.map(category => (
                         <option
@@ -38,6 +54,7 @@ export const Form = () => {
                     className="border border-slate-300 p-2 rounded-lg"
                     placeholder="Eje. Comida, juego de naranja, pesas, bicicleta"
                     value={activity.name}
+                    onChange={handleChange}
                 />
             </div>
             <div className="grid grid-cols-1 gap-3">
@@ -48,6 +65,7 @@ export const Form = () => {
                     className="border border-slate-300 p-2 rounded-lg"
                     placeholder="Calorias. eje. 300 o 500"
                     value={activity.calories}
+                    onChange={handleChange}
                 />
             </div>
 
