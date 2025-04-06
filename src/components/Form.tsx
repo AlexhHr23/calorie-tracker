@@ -1,4 +1,5 @@
 import { useState, ChangeEvent, FormEvent, Dispatch} from "react"
+import { v4 as uuid4} from 'uuid'
 import { Activity } from "../types"
 import { categories } from "../data/categories"
 import { ActivityActions } from "../reducers/activityReducer"
@@ -8,7 +9,8 @@ type FormProps = {
     dispatch: Dispatch<ActivityActions>
 }
 
-const initialState =  {
+const initialState: Activity =  {
+        id: uuid4(),
         category: 1,
         name: '',
         calories: 0
@@ -34,11 +36,13 @@ export const Form = ({dispatch} : FormProps) => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
-        console.log('submit');
 
         dispatch({ type: 'save-activity', payload: {newAactivity: activity}})
 
-        setActivity(initialState)
+        setActivity({
+            ...initialState,
+            id: uuid4()
+        })
     }
 
     const isValidActivity = () => {
