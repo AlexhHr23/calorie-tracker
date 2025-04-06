@@ -1,12 +1,18 @@
-import { useState, ChangeEvent} from "react"
+import { useState, ChangeEvent, FormEvent, Dispatch} from "react"
 import { Activity } from "../types"
 import { categories } from "../data/categories"
+import { ActivityActions } from "../reducers/activityReducer"
+
+
+type FormProps = {
+    dispatch: Dispatch<ActivityActions>
+}
 
 
 
-export const Form = () => {
+export const Form = ({dispatch} : FormProps) => {
 
-    const[activity, setActivity] = useState({
+    const[activity, setActivity] = useState<Activity>({
         category: 1,
         name: '',
         calories: 0
@@ -25,9 +31,24 @@ export const Form = () => {
         })
     }
 
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) =>{
+        e.preventDefault()
+        console.log('submit');
+
+        dispatch({ type: 'save-activity', payload: {newAactivity: activity}})
+    }
+
+    const isValidActivity = () => {
+       const {name, calories } = activity
+       return name.trim() !== '' && calories > 0
+    }
+
 
     return (
-        <form className="space-y-5 bg-white shadow p-10 rounded-lg">
+        <form 
+            className="space-y-5 bg-white shadow p-10 rounded-lg"
+            onSubmit={handleSubmit}
+        >
             <div className="grid grid-cols-1 gap-3">
                 <label htmlFor="category" className="font-bold">Categoria:</label>
                 <select 
@@ -72,8 +93,9 @@ export const Form = () => {
             <input 
                 type="submit" 
                 className="bg-gray-800 hover:bg-gray-900 w-full p-2 font-bold uppercase text-white
-                cursor-pointer"
-                value='Guardar comida o guardar ejercicio'
+                cursor-pointer disabled:opacity-10"
+                value={activity.category === 1 ? 'Guardar comida' : 'Guadar ekercicio'}
+                disabled={!isValidActivity()}
             />
         </form>
     )
