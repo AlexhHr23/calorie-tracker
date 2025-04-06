@@ -8,15 +8,16 @@ type FormProps = {
     dispatch: Dispatch<ActivityActions>
 }
 
+const initialState =  {
+        category: 1,
+        name: '',
+        calories: 0
+    }
 
 
 export const Form = ({dispatch} : FormProps) => {
 
-    const[activity, setActivity] = useState<Activity>({
-        category: 1,
-        name: '',
-        calories: 0
-    })
+    const[activity, setActivity] = useState<Activity>(initialState)
 
     
 
@@ -36,6 +37,8 @@ export const Form = ({dispatch} : FormProps) => {
         console.log('submit');
 
         dispatch({ type: 'save-activity', payload: {newAactivity: activity}})
+
+        setActivity(initialState)
     }
 
     const isValidActivity = () => {
